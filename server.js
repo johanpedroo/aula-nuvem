@@ -8,6 +8,7 @@ const config = require('./configs/config.js');
 const jwt = require('express-jwt');
 
 const userRoute = require('./routes/user');
+const nomeRoute = require('./routes/nome');
 const authRoute = require('./routes/authentication');
 const forgotPasswordRoute = require('./routes/forgotPassword');
 //const authentication = require('./middlewares/authenticationMiddleware')
@@ -36,10 +37,11 @@ app.get('/', (req,res) => {
   res.json({status:"up", date: Date()})
 })
 app.use(cookieParser());
-app.use(jwt({ secret: config.JWT_PASSWORD }).unless({ path: ['/v1/user', '/v1/login'] }));
+//app.use(jwt({ secret: config.JWT_PASSWORD }).unless({ path: ['/v1/user', '/v1/login'] }));
 require('./middlewares/errors.js')(app)
 
 app.use('/v1/user', userRoute);
+app.use('/v1/nome', nomeRoute);
 app.use('/v1/', authRoute);
 app.use('/v1/', forgotPasswordRoute);
 
