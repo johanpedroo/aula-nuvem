@@ -4,15 +4,9 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const config = require('./configs/config.js');
-const jwt = require('express-jwt');
 
-const userRoute = require('./routes/user');
 const nomeRoute = require('./routes/nome');
 const calculadoraRoute = require('./routes/calculadora');
-const authRoute = require('./routes/authentication');
-const forgotPasswordRoute = require('./routes/forgotPassword');
-//const authentication = require('./middlewares/authenticationMiddleware')
 
 const app = express();
 const port = process.env.PORT || 8888;
@@ -20,10 +14,6 @@ const port = process.env.PORT || 8888;
 
 // const favicon = require('serve-favicon')
 
-mongoose.connect(config.mongo);
-// view engine setup
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,13 +28,8 @@ app.get('/', (req,res) => {
   res.json({status:"up", date: Date()})
 })
 app.use(cookieParser());
-//app.use(jwt({ secret: config.JWT_PASSWORD }).unless({ path: ['/v1/user', '/v1/login'] }));
-require('./middlewares/errors.js')(app)
 
-app.use('/rest/user', userRoute);
 app.use('/rest/nomecompleto', nomeRoute);
 app.use('/rest/calculadora', calculadoraRoute);
-app.use('/v1/', authRoute);
-app.use('/v1/', forgotPasswordRoute);
 
 app.listen(port);
