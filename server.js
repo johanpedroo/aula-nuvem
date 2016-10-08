@@ -32,6 +32,9 @@ app.use(function(req, res, next) {
 
     next();
 });
+app.get('/', (req,res) => {
+  res.json({status:"up", date: Date()})
+})
 app.use(cookieParser());
 app.use(jwt({ secret: config.JWT_PASSWORD }).unless({ path: ['/v1/user', '/v1/login'] }));
 require('./middlewares/errors.js')(app)
