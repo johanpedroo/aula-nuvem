@@ -4,16 +4,15 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
-const nomeRoute = require('./routes/nome');
-const calculadoraRoute = require('./routes/calculadora');
+const config = require('./configs/config.js');
 
 const app = express();
-const port = process.env.PORT || 8888;
+const port = process.env.PORT || 8080;
 
 
 // const favicon = require('serve-favicon')
 
+mongoose.connect(process.env.MONGODB || config.mongo);
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,8 +27,5 @@ app.get('/', (req,res) => {
   res.json({status:"up", date: Date()})
 })
 app.use(cookieParser());
-
-app.use('/rest/nomecompleto', nomeRoute);
-app.use('/rest/calculadora', calculadoraRoute);
-
+const route = require('./routes/_routes')(app);
 app.listen(port);
